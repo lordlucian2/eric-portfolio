@@ -1,28 +1,38 @@
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 import { error } from '@sveltejs/kit';
 
-const caseStudies = {
-  'your-first-project': {
-    title: 'Your Project Name',
-    client: 'Client Name or "Personal Project"',
-    challenge: 'What problem did you solve? Describe the initial situation and pain points.',
-    strategy: 'Why did you choose this approach or tech stack? Explain your thinking.',
-    solution: 'What did you actually build? Highlight key features and implementation.',
-    result: 'What was the outcome? Include metrics, feedback, or lessons learned.'
-  },
-  'second-project': {
-    title: 'Another Great Project',
-    client: 'Another Client or "Open Source"',
-    challenge: 'The client needed a way to...',
-    strategy: 'We decided to use... because...',
-    solution: 'Built a full-stack application with...',
-    result: 'Improved performance by X% and user satisfaction increased.'
-  }
-};
-
 export function load({ params }) {
-  const project = caseStudies[params.slug];
-  if (project) {
-    return { project };
+  const slug = params.slug;
+  // Find the markdown file that has this slug in its frontmatter
+  const projectsDir = path.join(process.cwd(), 'src/content/projects');
+  const files = fs.readdirSync(projectsDir).filter(f => f.endsWith('.md'));
+  let projectData = null;
+  let foundFile = null;
+  
+  for (const file of files) {
+    const content = fs.readFileSync(path.join(projectsDir, file), 'utf-8');
+    const { data } = matter(content);
+    if (data.slug === slug || file.replace(/\.md$/, '') === slug) {
+      projectData = data;
+      foundFile = file;
+      break;
+    }
   }
-  throw error(404, 'Case study not found');
+  
+  if (!projectData) {
+    throw error(404, 'Project not found');
+  }
+  
+  return {
+    project: {
+      title: projectData.title,
+      client: projectData.client,
+      challenge: projectData.challenge,
+      strategy: projectData.strategy,
+      solution: projectData.solution,
+      result: projectData.result
+    }
+  };
 }

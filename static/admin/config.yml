@@ -1,0 +1,27 @@
+backend:
+  name: github
+  repo: lordlucian2/eric-portfolio
+  branch: main
+  base_url: https://oauth.decapcms.org
+  auth_endpoint: /auth/github
+
+media_folder: static/images
+public_folder: /images
+
+collections:
+  - name: "projects"
+    label: "Projects"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Tags", name: "tags", widget: "list", default: [] }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Client", name: "client", widget: "string" }
+      - { label: "Challenge", name: "challenge", widget: "text" }
+      - { label: "Strategy", name: "strategy", widget: "text" }
+      - { label: "Solution", name: "solution", widget: "text" }
+      - { label: "Result", name: "result", widget: "text" }
