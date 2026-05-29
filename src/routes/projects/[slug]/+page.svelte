@@ -1,6 +1,6 @@
 <script>
-  export let data;
-  $: project = data.project;
+  let { data } = $props();
+  let project = data.project;
 </script>
 
 <article class="case-study">

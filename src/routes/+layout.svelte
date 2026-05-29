@@ -1,5 +1,5 @@
 <script>
-  // No external CSS import needed
+  let { children } = $props();
 </script>
 
 <div class="app-container">
@@ -15,7 +15,7 @@
   </header>
 
   <main>
-    <slot />
+    {@render children?.()}
   </main>
 
   <footer>
